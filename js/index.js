@@ -1,31 +1,50 @@
-//Variables to use and it's a mix of global and local variables
 let shoppingCart = [];
-let products = document.getElementsByTagName('button');
-let cartProducts = '';
 
-//This code gets whatever is inside data-product in the HTML
-let product = event.target.parentNode.getAttribute('data-product');
-cartProducts += '<li><span class="product-title">Titel: </span>' + shoppingCart[i] + '</li>';
-shoppingCart.push(product);
+document.getElementById("open-cart").addEventListener("click", function () {
+  document.getElementById("cart").classList.toggle("hide");
+});
 
-//
-document.getElementById('productsInCart').innerHTML = shoppingCart.length;
-document.getElementById('cart').classList.toggle('hide');
-document.getElementById('products').innerHTML = cartProducts;
-products[i].addEventListener('click', function(event) {});
-document.getElementById('open-cart').addEventListener('click', function() {});
+let products = document.getElementsByTagName("button");
+for (let i = 0; i < products.length; i++) {
+  products[i].addEventListener("click", function (event) {
+    let product = event.target.parentNode.getAttribute("data-product");
 
-//Function declarations, add code inside {}
-function updateCart() {}
-function listProductsInCart() {}
+    for (const items of shoppingCart) {
+      if (items === product) {
+        return alert("Item already added in cart");
+      }
+    }
 
+    shoppingCart.push(product);
+    updateCart();
+    listProductsInCart();
+    console.log(shoppingCart);
+  });
+}
 
-//For-loops of two arrays
-for(let i = 0; i < shoppingCart.length; i++) {}
-for(let i = 0; i < products.length; i++) {}
+function listProductsInCart() {
+  document.getElementById("productsInCart").innerHTML = shoppingCart.length;
+}
 
+function updateCart() {
+  let cartProducts = "";
+  for (let i = 0; i < shoppingCart.length; i++) {
+    cartProducts +=
+      '<li><span class="product-title">Titel: </span>' +
+      shoppingCart[i] +
+      "\t <button class='remove-btn' data-index=" +
+      i +
+      ">x</button></li>";
+  }
+  document.getElementById("products").innerHTML = cartProducts;
+  let removeButtons = document.getElementsByClassName("remove-btn");
+  for (let button of removeButtons) {
+    button.addEventListener("click", (event) => {
+      let index = event.target.dataset.index;
+      shoppingCart.splice(index, 1);
+      updateCart();
+    });
+  }
+}
 
-//Function calls and there should be two listProductsInCart()
-updateCart();
-listProductsInCart();
-listProductsInCart();
+// listProductsInCart();
